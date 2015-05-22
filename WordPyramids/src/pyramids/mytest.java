@@ -69,12 +69,14 @@ public class mytest {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		// first create the entire Collection and gameCollection for the level 1
+		//Creates the entire Collection
 		Config.entireCollection = new BigWordCollection();
 		Config.gameCollection = Config.entireCollection;
-		//Config.gameCollection = Config.entireCollection.getBigWordCollectionByLevel(1);
+		//The following is an example of how to reduce collection using Siva's Methods (sort by difficulty level)
+		//Config.gameCollection = Config.entireCollection.getBigWordCollectionByLevel(1);   
+		System.out.println("Collection size before removing duplicates: " + Config.gameCollection.size());
 		Config.gameCollection.removeDuplicates();
-		System.out.println(Config.gameCollection.size());
+		System.out.println("Collection size after removing duplicates: " + Config.gameCollection.size());
 		//Prints the entire collection of words for testing purposes
 		Config.gameCollection.printCollection();
 

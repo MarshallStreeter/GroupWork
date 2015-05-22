@@ -63,7 +63,7 @@ public class BigWordCollection
 		makeAllCollections();
 	}
 	
-	//Group 1 Method for displaying the english words contained in the collection
+	//Group 1 Method for displaying the english words contained in the big word collection
 	public void printCollection() {
 		int temp = 0;
 		for (int i = 0; i < bigWordsList.size(); i++) {

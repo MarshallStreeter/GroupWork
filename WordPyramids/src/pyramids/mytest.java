@@ -71,11 +71,11 @@ public class mytest {
 	private void initialize() {
 		// first create the entire Collection and gameCollection for the level 1
 		Config.entireCollection = new BigWordCollection();
-		Config.gameCollection = Config.entireCollection.getBigWordCollectionByLevel(1);
+		Config.gameCollection = Config.entireCollection;
+		//Config.gameCollection = Config.entireCollection.getBigWordCollectionByLevel(1);
 		Config.gameCollection.removeDuplicates();
 		System.out.println(Config.gameCollection.size());
-		Config.gameCollection.removeDuplicates();
-		System.out.println(Config.gameCollection.size());
+		//Prints the entire collection of words for testing purposes
 		Config.gameCollection.printCollection();
 
 		frame = new JFrame();

@@ -24,6 +24,9 @@ import javax.swing.JLabel;
 import javax.swing.ComboBoxModel;
 import javax.swing.JCheckBox;
 
+//import core.BigWordCollection;
+//import core.Config;
+
 import java.awt.Color;
 
 public class mytest {
@@ -66,6 +69,14 @@ public class mytest {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		// first create the entire Collection and gameCollection for the level 1
+		Config.entireCollection = new BigWordCollection();
+		Config.gameCollection = Config.entireCollection.getBigWordCollectionByLevel(1);
+		Config.gameCollection.removeDuplicates();
+		System.out.println(Config.gameCollection.size());
+		Config.gameCollection.removeDuplicates();
+		System.out.println(Config.gameCollection.size());
+		Config.gameCollection.printCollection();
 
 		frame = new JFrame();
 		frame.getContentPane().setBackground(new Color(70, 130, 180));
@@ -81,6 +92,7 @@ public class mytest {
 
 		Vector string_items = new Vector();
 		string_items.add("Animals");
+		string_items.add("Places");
 
 		final DefaultComboBoxModel model1 = new DefaultComboBoxModel(int_items);
 		JComboBox cboMin = new JComboBox(model1);

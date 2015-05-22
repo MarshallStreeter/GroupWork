@@ -63,6 +63,7 @@ public class BigWordCollection
 		makeAllCollections();
 	}
 	
+	
 	public void printCollection() {
 		int temp = 0;
 		for (int i = 0; i < bigWordsList.size(); i++) {

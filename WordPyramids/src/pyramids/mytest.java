@@ -77,7 +77,7 @@ public class mytest {
 		System.out.println("Collection size before removing duplicates: " + Config.gameCollection.size());
 		Config.gameCollection.removeDuplicates();
 		System.out.println("Collection size after removing duplicates: " + Config.gameCollection.size());
-		//Prints the entire collection of words for testing purposes
+		//I created printCollection() for testing purposes, feel free to edit it as necessary
 		Config.gameCollection.printCollection();
 
 		frame = new JFrame();

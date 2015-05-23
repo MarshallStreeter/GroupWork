@@ -218,6 +218,21 @@ public class mytest {
 		BigWordCollection wordList = Config.entireCollection
 				.getBigWordCollectionByTopic(cboTopic.getSelectedItem()
 						.toString());
+		
+		//this sequence shows how to pull the word, then parse to the usable arraylist
+		BigWord test = wordList.getBigWord(0);
+		//this can be separated by a conditional based on language selected, big word class provides option to get other langauge
+		WordProcessor process = new WordProcessor(test.getEnglish());
+		//store this arraylist based on sized in topicWord ArrayList<ArrayList<String>>, will need to be created***
+		ArrayList<String> testWord = Parser.stripSpaces(process.getLogicalChars());
+		//proof of each letter being separate
+		for(String element: testWord){
+			System.out.println(element);
+		}
+		//from here will need to then choose the word (its ArrayList<String>> from topic list) from first index, on up to the max
+		//will need to be n-1 of the selection, then add that to the gameList, similar in construction to the topic list but only with playable words
+		//that will then be appropriate for the html output
+		//**If no word is found of a certain length, output a list of approiate length with blank spaces**
 
 		ArrayList<String> list = new ArrayList<String>();
 		list.add("J");

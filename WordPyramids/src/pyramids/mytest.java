@@ -1,7 +1,5 @@
 package pyramids;
 
-
-
 import java.awt.Component;
 import java.awt.Desktop;
 import java.awt.EventQueue;
@@ -17,6 +15,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.Map.Entry;
 import java.util.Vector;
 
 import javax.swing.JComboBox;
@@ -40,6 +40,7 @@ public class mytest {
 	private JFrame frame;
 	private JButton btnMybutton;
 	private JButton generateHtmlBtn;
+	private JComboBox cboTopic;
 
 	/**
 	 * Launch the application.
@@ -69,15 +70,20 @@ public class mytest {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		//Creates the entire Collection
+		// Creates the entire Collection
 		Config.entireCollection = new BigWordCollection();
 		Config.gameCollection = Config.entireCollection;
-		//The following is an example of how to reduce collection using Siva's Methods (sort by difficulty level)
-		//Config.gameCollection = Config.entireCollection.getBigWordCollectionByLevel(1);   
-		System.out.println("Collection size before removing duplicates: " + Config.gameCollection.size());
+		// The following is an example of how to reduce collection using Siva's
+		// Methods (sort by difficulty level)
+		// Config.gameCollection =
+		// Config.entireCollection.getBigWordCollectionByLevel(1);
+		System.out.println("Collection size before removing duplicates: "
+				+ Config.gameCollection.size());
 		Config.gameCollection.removeDuplicates();
-		System.out.println("Collection size after removing duplicates: " + Config.gameCollection.size());
-		//I created printCollection() for testing purposes, feel free to edit it as necessary
+		System.out.println("Collection size after removing duplicates: "
+				+ Config.gameCollection.size());
+		// I created printCollection() for testing purposes, feel free to edit
+		// it as necessary
 		Config.gameCollection.printCollection();
 
 		frame = new JFrame();
@@ -127,9 +133,7 @@ public class mytest {
 		lblMax.setBounds(285, 55, 46, 14);
 		frame.getContentPane().add(lblMax);
 
-		final DefaultComboBoxModel model3 = new DefaultComboBoxModel(
-				string_items);
-		JComboBox cboTopic = new JComboBox(model3);
+		cboTopic = new JComboBox(populateTopicBox());
 
 		cboTopic.setBounds(546, 52, 147, 20);
 		frame.getContentPane().add(cboTopic);
@@ -185,6 +189,20 @@ public class mytest {
 
 	}
 
+	private Object[] populateTopicBox() {
+		ArrayList<String> topicStrings = new ArrayList<String>();
+		Hashtable<String, ArrayList<BigWord>> selects = Config.entireCollection
+				.getBigWordsTopicsTable();
+		for (Entry<String, ArrayList<BigWord>> entry : selects.entrySet()) {
+			String key = entry.getKey();
+			topicStrings.add(key);
+
+			// do what you have to do here
+			// In your case, an other loop.
+		}
+		return topicStrings.toArray();
+	}
+
 	private void play_game(int userMin, int userMax) {
 
 		int i, x, y, h, p;
@@ -194,6 +212,13 @@ public class mytest {
 		y = 580;
 		int level = 44;
 		p = 0;
+		//This should give the words to be used based on topic
+		//will now need to be broken down into the proper form to be selected for game
+		//the list of lists method mentioned in class
+		BigWordCollection wordList = Config.entireCollection
+				.getBigWordCollectionByTopic(cboTopic.getSelectedItem()
+						.toString());
+
 		ArrayList<String> list = new ArrayList<String>();
 		list.add("J");
 		list.add("A");

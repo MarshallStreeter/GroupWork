@@ -37,7 +37,7 @@ public class HtmlBodyCreator {
 	private static String letterBlock(String letter) {
 
 		return String
-				.format("<div style='border: 1px solid black;display:inline-block;padding:5px'>%s\n</div>",
+				.format("<div style='border: 1px solid black;display:inline-block;padding:5px;width:15px;height:15px;'>%s\n</div>",
 						letter);
 	}
 }

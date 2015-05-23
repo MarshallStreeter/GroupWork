@@ -1,33 +1,18 @@
 package pyramids;
 
-import java.awt.Component;
-import java.awt.Desktop;
-import java.awt.EventQueue;
-
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-
-import java.awt.BorderLayout;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Hashtable;
+import java.awt.*;
+import java.io.*;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Vector;
 
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.ComboBoxModel;
-import javax.swing.JCheckBox;
-
+import javax.swing.*;
 //import core.BigWordCollection;
 //import core.Config;
-
-import java.awt.Color;
+// Test commit
+import java.awt.*;
+import java.awt.event.*;
+import java.awt.event.*;
+import java.awt.*;
 
 public class mytest {
 
@@ -218,7 +203,7 @@ public class mytest {
 		BigWordCollection wordList = Config.entireCollection
 				.getBigWordCollectionByTopic(cboTopic.getSelectedItem()
 						.toString());
-		
+
 		//this sequence shows how to pull the word, then parse to the usable arraylist
 		BigWord test = wordList.getBigWord(0);
 		//this can be separated by a conditional based on language selected, big word class provides option to get other langauge

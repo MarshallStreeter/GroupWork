@@ -1,18 +1,12 @@
 package pyramids;
 
 import java.awt.*;
+import java.awt.event.*;
 import java.io.*;
 import java.util.*;
 import java.util.Map.Entry;
 
 import javax.swing.*;
-//import core.BigWordCollection;
-//import core.Config;
-// Test commit
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.event.*;
-import java.awt.*;
 
 public class mytest {
 
@@ -69,7 +63,7 @@ public class mytest {
 				+ Config.gameCollection.size());
 		// I created printCollection() for testing purposes, feel free to edit
 		// it as necessary
-		Config.gameCollection.printCollection();
+		//Config.gameCollection.printCollection();
 
 		frame = new JFrame();
 		frame.getContentPane().setBackground(new Color(70, 130, 180));
@@ -197,12 +191,28 @@ public class mytest {
 		y = 580;
 		int level = 44;
 		p = 0;
+
+		// TODO: Setting this to English for now, needed for collectionByWordLength
+		Config.LANGUAGE = "English";
+
 		//This should give the words to be used based on topic
 		//will now need to be broken down into the proper form to be selected for game
 		//the list of lists method mentioned in class
 		BigWordCollection wordList = Config.entireCollection
 				.getBigWordCollectionByTopic(cboTopic.getSelectedItem()
 						.toString());
+
+		// Basic test for getting ArrayList of ArrayLists of logical characters
+		ArrayList<ArrayList<String>> example = getLogicalList(wordList);
+
+        for( ArrayList<String> word: example){
+
+            for( String letter: word){
+                System.out.print(" " + letter);
+            }
+            System.out.println("");
+
+        }
 
 		//this sequence shows how to pull the word, then parse to the usable arraylist
 		BigWord test = wordList.getBigWord(0);
@@ -272,6 +282,52 @@ public class mytest {
 
 	}
 
+
+    // Select a random BigWord from a BigWordCollection
+    private BigWord getRandomBigWord(BigWordCollection collection)
+    {
+        Random rand = new Random();
+        int index = rand.nextInt(collection.size());
+
+        BigWord bw = collection.getBigWord(index);
+
+        return bw;
+    }
+
+    // Get an ArrayList of String ArrayLists containing logical characters of words
+    // TODO: This only cares about topic and isn't very efficient
+    // It also simply ignores empty collections
+    private ArrayList<ArrayList<String>> getLogicalList(BigWordCollection topic)
+    {
+        ArrayList<ArrayList<String>> logicalWords =
+            new ArrayList<ArrayList<String>>();
+
+        WordProcessor wp = new WordProcessor();
+        ArrayList<String> list = null;
+        BigWordCollection c = null;
+
+        for (int i = userMax; i >= 1; i--) {
+
+            c = topic.getBigWordCollectionByWordLength(i);
+            if(c.isEmpty())
+                continue;
+
+            BigWord next = getRandomBigWord(c);
+
+            wp.setWord(next.getEnglish());
+            list = Parser.stripSpaces(wp.getLogicalChars());
+
+            logicalWords.add(list);
+
+            System.out.println(i);
+            System.out.println(next.getEnglish());
+        }
+
+
+        return logicalWords;
+
+    }
+
 	private class GenerateHTMLButtonHandler implements ActionListener {
 
 		@Override
@@ -321,5 +377,6 @@ public class mytest {
 			}
 			return false;
 		}
+
 	}
 }

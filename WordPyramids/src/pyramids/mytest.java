@@ -1,5 +1,6 @@
 package pyramids;
 
+
 import java.awt.Component;
 import java.awt.Desktop;
 import java.awt.EventQueue;
@@ -18,18 +19,15 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Hashtable;
+
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
+import java.util.*;
+
 import java.util.Map.Entry;
-import java.util.Vector;
 
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.ComboBoxModel;
-import javax.swing.JCheckBox;
-
-//import core.BigWordCollection;
-//import core.Config;
-
-import java.awt.Color;
+import javax.swing.*;
 
 public class mytest {
 
@@ -87,7 +85,7 @@ public class mytest {
 				+ Config.gameCollection.size());
 		// I created printCollection() for testing purposes, feel free to edit
 		// it as necessary
-		Config.gameCollection.printCollection();
+		//Config.gameCollection.printCollection();
 
 		frame = new JFrame();
 		frame.getContentPane().setBackground(new Color(70, 130, 180));
@@ -219,7 +217,10 @@ public class mytest {
 		int height = 60;
 		x = formWidth / 2 - ((userMax / 2) * length);
 		y = 580;
+
 		int level = 30;
+
+
 
 		boolean english = ((language.getSelectedItem().toString().toLowerCase()
 				.equals("english")) ? true : false);
@@ -262,6 +263,52 @@ public class mytest {
 
 	}
 
+
+    // Select a random BigWord from a BigWordCollection
+    private BigWord getRandomBigWord(BigWordCollection collection)
+    {
+        Random rand = new Random();
+        int index = rand.nextInt(collection.size());
+
+        BigWord bw = collection.getBigWord(index);
+
+        return bw;
+    }
+
+    // Get an ArrayList of String ArrayLists containing logical characters of words
+    // TODO: This only cares about topic and isn't very efficient
+    // It also simply ignores empty collections
+    private ArrayList<ArrayList<String>> getLogicalList(BigWordCollection topic)
+    {
+        ArrayList<ArrayList<String>> logicalWords =
+            new ArrayList<ArrayList<String>>();
+
+        WordProcessor wp = new WordProcessor();
+        ArrayList<String> list = null;
+        BigWordCollection c = null;
+
+        for (int i = userMax; i >= 1; i--) {
+
+            c = topic.getBigWordCollectionByWordLength(i);
+            if(c.isEmpty())
+                continue;
+
+            BigWord next = getRandomBigWord(c);
+
+            wp.setWord(next.getEnglish());
+            list = Parser.stripSpaces(wp.getLogicalChars());
+
+            logicalWords.add(list);
+
+            System.out.println(i);
+            System.out.println(next.getEnglish());
+        }
+
+
+        return logicalWords;
+
+    }
+
 	private class GenerateHTMLButtonHandler implements ActionListener {
 
 		@Override
@@ -297,5 +344,6 @@ public class mytest {
 			}
 			return false;
 		}
+
 	}
 }

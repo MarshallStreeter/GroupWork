@@ -1,30 +1,10 @@
 package pyramids;
 
 
-import java.awt.Component;
-import java.awt.Desktop;
-import java.awt.EventQueue;
-import java.awt.Font;
-
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-
-import java.awt.BorderLayout;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.Hashtable;
-
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.util.*;
-
 import java.util.Map.Entry;
 
 import javax.swing.*;
@@ -36,12 +16,14 @@ public class mytest {
 	int formWidth = 1065;
 	int formHeight = 843;
 	int count = 0;
+	boolean scramble = false;
 
 	private JFrame frame;
 	private JButton btnMybutton;
 	private JButton generateHtmlBtn;
 	private JComboBox cboTopic;
 	private JComboBox language;
+	private final Action action = new SwingAction();
 
 	/**
 	 * Launch the application.
@@ -139,9 +121,14 @@ public class mytest {
 		lblTopic.setBounds(500, 55, 46, 14);
 		frame.getContentPane().add(lblTopic);
 
-		JCheckBox ckbxRandom = new JCheckBox("Scramble");
+		final JCheckBox ckbxRandom = new JCheckBox("Scramble");
+		ckbxRandom.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		        scramble = ckbxRandom.isSelected();
+		    }
+		});
 		ckbxRandom.setBackground(new Color(70, 130, 180));
-		ckbxRandom.setBounds(746, 159, 97, 23);
+		ckbxRandom.setBounds(746, 159, 83, 23);
 		frame.getContentPane().add(ckbxRandom);
 
 		JButton btnPlay = new JButton("Play Game");
@@ -196,7 +183,7 @@ public class mytest {
 
 	/**
 	 * Populates the topic list
-	 * 
+	 *
 	 * @return
 	 */
 	private Object[] populateTopicBox() {
@@ -227,7 +214,7 @@ public class mytest {
 		//separates logic and storage from the GUI class that isn't related to drawing board
 		GUIFacade.instance().generateWords(true,
 				cboTopic.getSelectedItem().toString(), userMin, userMax,
-				english);
+				english, scramble);
 
 		Font font = new Font("gautami", Font.PLAIN, 10);
 		for (int h = GUIFacade.instance().getGameWords().size() - 1; h >= 0; h--) {
@@ -263,51 +250,6 @@ public class mytest {
 
 	}
 
-
-    // Select a random BigWord from a BigWordCollection
-    private BigWord getRandomBigWord(BigWordCollection collection)
-    {
-        Random rand = new Random();
-        int index = rand.nextInt(collection.size());
-
-        BigWord bw = collection.getBigWord(index);
-
-        return bw;
-    }
-
-    // Get an ArrayList of String ArrayLists containing logical characters of words
-    // TODO: This only cares about topic and isn't very efficient
-    // It also simply ignores empty collections
-    private ArrayList<ArrayList<String>> getLogicalList(BigWordCollection topic)
-    {
-        ArrayList<ArrayList<String>> logicalWords =
-            new ArrayList<ArrayList<String>>();
-
-        WordProcessor wp = new WordProcessor();
-        ArrayList<String> list = null;
-        BigWordCollection c = null;
-
-        for (int i = userMax; i >= 1; i--) {
-
-            c = topic.getBigWordCollectionByWordLength(i);
-            if(c.isEmpty())
-                continue;
-
-            BigWord next = getRandomBigWord(c);
-
-            wp.setWord(next.getEnglish());
-            list = Parser.stripSpaces(wp.getLogicalChars());
-
-            logicalWords.add(list);
-
-            System.out.println(i);
-            System.out.println(next.getEnglish());
-        }
-
-
-        return logicalWords;
-
-    }
 
 	private class GenerateHTMLButtonHandler implements ActionListener {
 
@@ -346,4 +288,12 @@ public class mytest {
 		}
 
 	}
+    private class SwingAction extends AbstractAction {
+        public SwingAction() {
+            putValue(NAME, "SwingAction");
+            putValue(SHORT_DESCRIPTION, "Some short description");
+        }
+        public void actionPerformed(ActionEvent e) {
+        }
+    }
 }

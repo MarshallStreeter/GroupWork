@@ -1,8 +1,6 @@
 package pyramids;
 
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.Random;
+import java.util.*;
 
 public class GUIFacade {
 
@@ -16,13 +14,13 @@ public class GUIFacade {
 	public static GUIFacade instance() {
 		if (instance == null) {
 			instance = new GUIFacade();
-		} 
+		}
 		return instance;
 	}
 
 	/**
 	 * Sort words available for game by length
-	 * 
+	 *
 	 * @param list
 	 * @return
 	 */
@@ -59,7 +57,7 @@ public class GUIFacade {
 
 	private ArrayList<ArrayList<String>> unrelatedGameWords(
 			Hashtable<Integer, ArrayList<ArrayList<String>>> table, int min,
-			int max) {
+			int max, boolean scramble) {
 		ArrayList<ArrayList<String>> gameWords = new ArrayList<ArrayList<String>>();
 		for (int i = min; i <= max; i++) {
 			if (table.containsKey(i)) {
@@ -81,17 +79,26 @@ public class GUIFacade {
 				gameWords.add(temp);
 			}
 		}
+		if(scramble){
+		    ArrayList<ArrayList<String>> temp = new ArrayList<ArrayList<String>>();
+		    WordProcessor wp = new WordProcessor();
+		    for( ArrayList<String> word : gameWords){
+		        wp.setLogicalChars(word);
+		        temp.add(wp.getScrambledChars());
+		    }
+		    gameWords = temp;
+		}
 		return gameWords;
 	}
 
 	public void generateWords(boolean unrelated, String topic, int userMin,
-			int userMax, boolean english) {
+			int userMax, boolean english, boolean scramble) {
 		Hashtable<Integer, ArrayList<ArrayList<String>>> topicList = sortTopicList(
 				Config.entireCollection.getBigWordCollectionByTopic(topic),
 				english);
 
 		if (unrelated) {
-			gameWords = unrelatedGameWords(topicList, userMin, userMax);
+			gameWords = unrelatedGameWords(topicList, userMin, userMax, scramble);
 		} else {
 			//need to build related game words method
 		}
@@ -103,7 +110,7 @@ public class GUIFacade {
 
 	/**
 	 * Break word into logical chars
-	 * 
+	 *
 	 * @param word
 	 * @return ArrayList of each element in its own index
 	 */

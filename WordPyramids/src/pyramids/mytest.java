@@ -3,6 +3,7 @@ package pyramids;
 import java.awt.Component;
 import java.awt.Desktop;
 import java.awt.EventQueue;
+import java.awt.Font;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -14,6 +15,7 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Map.Entry;
@@ -41,6 +43,7 @@ public class mytest {
 	private JButton btnMybutton;
 	private JButton generateHtmlBtn;
 	private JComboBox cboTopic;
+	private JComboBox language;
 
 	/**
 	 * Launch the application.
@@ -97,10 +100,6 @@ public class mytest {
 		int x;
 		for (x = 1; x <= 10; x++)
 			int_items.add(x);
-
-		Vector string_items = new Vector();
-		string_items.add("Animals");
-		string_items.add("Places");
 
 		final DefaultComboBoxModel model1 = new DefaultComboBoxModel(int_items);
 		JComboBox cboMin = new JComboBox(model1);
@@ -168,6 +167,14 @@ public class mytest {
 		generateHtmlBtn.addActionListener(new GenerateHTMLButtonHandler());
 		generateHtmlBtn.setBounds(746, 100, 200, 50);
 		frame.getContentPane().add(generateHtmlBtn);
+		String[] languages = { "English", "Telugu" };
+		language = new JComboBox(languages);
+		language.setBounds(118, 100, 147, 22);
+		frame.getContentPane().add(language);
+
+		JLabel lblLanguage = new JLabel("Language");
+		lblLanguage.setBounds(59, 103, 56, 16);
+		frame.getContentPane().add(lblLanguage);
 
 	}
 
@@ -189,6 +196,11 @@ public class mytest {
 
 	}
 
+	/**
+	 * Populates the topic list
+	 * 
+	 * @return
+	 */
 	private Object[] populateTopicBox() {
 		ArrayList<String> topicStrings = new ArrayList<String>();
 		Hashtable<String, ArrayList<BigWord>> selects = Config.entireCollection
@@ -196,82 +208,45 @@ public class mytest {
 		for (Entry<String, ArrayList<BigWord>> entry : selects.entrySet()) {
 			String key = entry.getKey();
 			topicStrings.add(key);
-
-			// do what you have to do here
-			// In your case, an other loop.
 		}
 		return topicStrings.toArray();
 	}
 
 	private void play_game(int userMin, int userMax) {
 
-		int i, x, y, h, p;
-		int length = 88;
-		int height = 88;
+		int x, y;
+		int length = 60;
+		int height = 60;
 		x = formWidth / 2 - ((userMax / 2) * length);
 		y = 580;
-		int level = 44;
-		p = 0;
-		//This should give the words to be used based on topic
-		//will now need to be broken down into the proper form to be selected for game
-		//the list of lists method mentioned in class
-		BigWordCollection wordList = Config.entireCollection
-				.getBigWordCollectionByTopic(cboTopic.getSelectedItem()
-						.toString());
-		
-		//this sequence shows how to pull the word, then parse to the usable arraylist
-		BigWord test = wordList.getBigWord(0);
-		//this can be separated by a conditional based on language selected, big word class provides option to get other langauge
-		WordProcessor process = new WordProcessor(test.getEnglish());
-		//store this arraylist based on sized in topicWord ArrayList<ArrayList<String>>, will need to be created***
-		ArrayList<String> testWord = Parser.stripSpaces(process.getLogicalChars());
-		//proof of each letter being separate
-		for(String element: testWord){
-			System.out.println(element);
-		}
-		//from here will need to then choose the word (its ArrayList<String>> from topic list) from first index, on up to the max
-		//will need to be n-1 of the selection, then add that to the gameList, similar in construction to the topic list but only with playable words
-		//that will then be appropriate for the html output
-		//**If no word is found of a certain length, output a list of approiate length with blank spaces**
+		int level = 30;
 
-		ArrayList<String> list = new ArrayList<String>();
-		list.add("J");
-		list.add("A");
-		list.add("G");
-		list.add("U");
-		list.add("A");
-		list.add("R");
+		boolean english = ((language.getSelectedItem().toString().toLowerCase()
+				.equals("english")) ? true : false);
+		//separates logic and storage from the GUI class that isn't related to drawing board
+		GUIFacade.instance().generateWords(true,
+				cboTopic.getSelectedItem().toString(), userMin, userMax,
+				english);
 
-		list.add("A");
-		list.add("G");
-		list.add("U");
-		list.add("A");
-		list.add("R");
+		Font font = new Font("gautami", Font.PLAIN, 12);
+		for (int h = GUIFacade.instance().getGameWords().size() - 1; h >= 0; h--) {
 
-		list.add("G");
-		list.add("U");
-		list.add("A");
-		list.add("R");
+			for (int i = 0; i < GUIFacade.instance().getGameWords().get(h)
+					.size(); i++) {
 
-		list.add("U");
-		list.add("A");
-		list.add("R");
+				try {
+					byte[] b = GUIFacade.instance().getGameWords().get(h)
+							.get(i).getBytes("UTF-8");
+					btnMybutton = new JButton(new String(b, "UTF-8"));
+					btnMybutton.setFont(font);
+				} catch (UnsupportedEncodingException e) {
 
-		list.add("A");
-		list.add("R");
-
-		list.add("R");
-
-		for (h = userMin - 1; h < userMax; h++) {
-
-			for (i = userMin; i <= userMax - h; i++) {
-
-				btnMybutton = new JButton(list.get(p));
+					e.printStackTrace();
+				}
 				btnMybutton.setName("Letter");
-				p += 1;
 
 				// x,y,length, height
-				if (i != userMin)
+				if (i != 0)
 					x = x + length;
 
 				btnMybutton.setBounds(x, y, length, height);
@@ -280,7 +255,7 @@ public class mytest {
 				frame.repaint();
 
 			}
-			y -= 88;
+			y -= height;
 			x = formWidth / 2 - ((userMax / 2) * length) + level;
 			level += length / 2;
 		}
@@ -293,22 +268,8 @@ public class mytest {
 		public void actionPerformed(ActionEvent arg0) {
 			// TODO Auto-generated method stub
 
-			ArrayList<ArrayList<String>> list = new ArrayList<ArrayList<String>>();
-			ArrayList<String> one = new ArrayList<String>();
-			ArrayList<String> two = new ArrayList<String>();
-			ArrayList<String> three = new ArrayList<String>();
-			// this will have to be linked to the breakdown of the word to
-			// function dynamically
-			one.add("T");
-			two.add("T");
-			two.add("O");
-			three.add("T");
-			three.add("O");
-			three.add("W");
-			list.add(one);
-			list.add(two);
-			list.add(three);
-			saveNewFile(HtmlBodyCreator.createBody(list));
+			saveNewFile(HtmlBodyCreator.createBody(GUIFacade.instance()
+					.getGameWords()));
 			String htmlFilePath = "Pyramid.html"; // path to your new file
 			File htmlFile = new File(htmlFilePath);
 

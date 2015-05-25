@@ -11,7 +11,7 @@ public class HtmlBodyCreator {
 	 * @return
 	 */
 	public static String createBody(ArrayList<ArrayList<String>> list) {
-		String body = "<html><head><title>Word Pyramid</title>"
+		String body = "<html><head><meta charset=utf-8><title>Word Pyramid</title>"
 				+ "</head><body>\n"
 				+ "<div style='width:600px; margin: 0 auto; text-align: center;'>";
 		for (int i = 0; i < list.size(); i++) {
@@ -37,7 +37,7 @@ public class HtmlBodyCreator {
 	private static String letterBlock(String letter) {
 
 		return String
-				.format("<div style='border: 1px solid black;display:inline-block;padding:5px;width:15px;height:15px;'>%s\n</div>",
+				.format("<div style='border: 1px solid black;display:inline-block;padding:5px;width:35px;height:35px;'>%s\n</div>",
 						letter);
 	}
 }

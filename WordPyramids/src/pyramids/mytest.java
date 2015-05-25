@@ -228,7 +228,7 @@ public class mytest {
 				cboTopic.getSelectedItem().toString(), userMin, userMax,
 				english);
 
-		Font font = new Font("gautami", Font.PLAIN, 12);
+		Font font = new Font("gautami", Font.PLAIN, 10);
 		for (int h = GUIFacade.instance().getGameWords().size() - 1; h >= 0; h--) {
 
 			for (int i = 0; i < GUIFacade.instance().getGameWords().get(h)

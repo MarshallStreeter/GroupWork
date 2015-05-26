@@ -172,6 +172,7 @@ public class GUIFacade {
 		}
 		return true;
 	}
+	
 	public void generateWords(boolean unrelated, String topic, int userMin,
 			int userMax, boolean english,boolean scramble) {
 		Hashtable<Integer, ArrayList<ArrayList<String>>> topicList = sortTopicList(

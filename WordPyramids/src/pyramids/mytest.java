@@ -80,11 +80,7 @@ public class mytest {
 		// Methods (sort by difficulty level)
 		// Config.gameCollection =
 		// Config.entireCollection.getBigWordCollectionByLevel(1);
-		System.out.println("Collection size before removing duplicates: "
-				+ Config.gameCollection.size());
 		Config.gameCollection.removeDuplicates();
-		System.out.println("Collection size after removing duplicates: "
-				+ Config.gameCollection.size());
 		// I created printCollection() for testing purposes, feel free to edit
 		// it as necessary
 		//Config.gameCollection.printCollection();
@@ -208,6 +204,7 @@ public class mytest {
 	 */
 	private Object[] populateTopicBox() {
 		ArrayList<String> topicStrings = new ArrayList<String>();
+		topicStrings.add("Any");
 		Hashtable<String, ArrayList<BigWord>> selects = Config.entireCollection
 				.getBigWordsTopicsTable();
 		for (Entry<String, ArrayList<BigWord>> entry : selects.entrySet()) {

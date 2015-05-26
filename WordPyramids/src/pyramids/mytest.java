@@ -42,6 +42,8 @@ public class mytest {
 	private JButton generateHtmlBtn;
 	private JComboBox cboTopic;
 	private JComboBox language;
+	private JCheckBox relatedCheckBox;
+	private JCheckBox scrambleChkBox;
 
 	/**
 	 * Launch the application.
@@ -139,10 +141,10 @@ public class mytest {
 		lblTopic.setBounds(500, 55, 46, 14);
 		frame.getContentPane().add(lblTopic);
 
-		JCheckBox ckbxRandom = new JCheckBox("Scramble");
-		ckbxRandom.setBackground(new Color(70, 130, 180));
-		ckbxRandom.setBounds(746, 159, 97, 23);
-		frame.getContentPane().add(ckbxRandom);
+		scrambleChkBox = new JCheckBox("Scramble");
+		scrambleChkBox.setBackground(new Color(70, 130, 180));
+		scrambleChkBox.setBounds(746, 159, 97, 23);
+		frame.getContentPane().add(scrambleChkBox);
 
 		JButton btnPlay = new JButton("Play Game");
 		btnPlay.addActionListener(new ActionListener() {
@@ -173,6 +175,11 @@ public class mytest {
 		JLabel lblLanguage = new JLabel("Language");
 		lblLanguage.setBounds(59, 103, 56, 16);
 		frame.getContentPane().add(lblLanguage);
+		
+		relatedCheckBox = new JCheckBox("Use Related Words");
+		relatedCheckBox.setBounds(746, 199, 200, 50);
+		relatedCheckBox.setBackground(new Color(70, 130, 180));
+		frame.getContentPane().add(relatedCheckBox);
 
 	}
 
@@ -224,10 +231,12 @@ public class mytest {
 
 		boolean english = ((language.getSelectedItem().toString().toLowerCase()
 				.equals("english")) ? true : false);
+		boolean unrelated = !relatedCheckBox.isSelected();
+		boolean scramble = scrambleChkBox.isSelected();
 		//separates logic and storage from the GUI class that isn't related to drawing board
-		GUIFacade.instance().generateWords(true,
+		GUIFacade.instance().generateWords(unrelated,
 				cboTopic.getSelectedItem().toString(), userMin, userMax,
-				english);
+				english,scramble);
 
 		Font font = new Font("gautami", Font.PLAIN, 10);
 		for (int h = GUIFacade.instance().getGameWords().size() - 1; h >= 0; h--) {
@@ -262,52 +271,6 @@ public class mytest {
 		}
 
 	}
-
-
-    // Select a random BigWord from a BigWordCollection
-    private BigWord getRandomBigWord(BigWordCollection collection)
-    {
-        Random rand = new Random();
-        int index = rand.nextInt(collection.size());
-
-        BigWord bw = collection.getBigWord(index);
-
-        return bw;
-    }
-
-    // Get an ArrayList of String ArrayLists containing logical characters of words
-    // TODO: This only cares about topic and isn't very efficient
-    // It also simply ignores empty collections
-    private ArrayList<ArrayList<String>> getLogicalList(BigWordCollection topic)
-    {
-        ArrayList<ArrayList<String>> logicalWords =
-            new ArrayList<ArrayList<String>>();
-
-        WordProcessor wp = new WordProcessor();
-        ArrayList<String> list = null;
-        BigWordCollection c = null;
-
-        for (int i = userMax; i >= 1; i--) {
-
-            c = topic.getBigWordCollectionByWordLength(i);
-            if(c.isEmpty())
-                continue;
-
-            BigWord next = getRandomBigWord(c);
-
-            wp.setWord(next.getEnglish());
-            list = Parser.stripSpaces(wp.getLogicalChars());
-
-            logicalWords.add(list);
-
-            System.out.println(i);
-            System.out.println(next.getEnglish());
-        }
-
-
-        return logicalWords;
-
-    }
 
 	private class GenerateHTMLButtonHandler implements ActionListener {
 

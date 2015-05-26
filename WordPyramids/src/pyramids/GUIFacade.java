@@ -1,7 +1,9 @@
 package pyramids;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Hashtable;
+import java.util.LinkedList;
 import java.util.Random;
 
 public class GUIFacade {
@@ -13,10 +15,15 @@ public class GUIFacade {
 
 	}
 
+	/**
+	 * Only want one instance acting with the GUI
+	 * 
+	 * @return
+	 */
 	public static GUIFacade instance() {
 		if (instance == null) {
 			instance = new GUIFacade();
-		} 
+		}
 		return instance;
 	}
 
@@ -26,7 +33,7 @@ public class GUIFacade {
 	 * @param list
 	 * @return
 	 */
-	public Hashtable<Integer, ArrayList<ArrayList<String>>> sortTopicList(
+	private Hashtable<Integer, ArrayList<ArrayList<String>>> sortTopicList(
 			BigWordCollection list, boolean english) {
 
 		Hashtable<Integer, ArrayList<ArrayList<String>>> availableWordBoard = new Hashtable<Integer, ArrayList<ArrayList<String>>>();
@@ -84,8 +91,89 @@ public class GUIFacade {
 		return gameWords;
 	}
 
+	private ArrayList<ArrayList<String>> relatedGameWords(
+			Hashtable<Integer, ArrayList<ArrayList<String>>> table, int min,
+			int max) {
+		ArrayList<ArrayList<String>> gameWords = new ArrayList<ArrayList<String>>();
+		LinkedList<ArrayList<String>> seedWord = null;
+		for (int i = min; i <= max; i++) {
+
+			if (i == min||seedWord == null) {
+				if (table.containsKey(i)) {
+					Random rand = new Random();
+					int size = table.get(i).size();
+
+					int listSelection = rand.nextInt((table.get(i).size()));
+					if (listSelection == size) {
+						gameWords.add(table.get(i).get(listSelection - 1));
+						seedWord = new LinkedList<ArrayList<String>>();
+						seedWord.add(table.get(i).get(listSelection - 1));
+					} else {
+						gameWords.add(table.get(i).get(listSelection));
+						seedWord = new LinkedList<ArrayList<String>>();
+						seedWord.add(table.get(i).get(listSelection));
+					}
+
+				} else {
+					ArrayList<String> temp = new ArrayList<String>();
+					for (int z = 0; z < i; z++) {
+						temp.add(" ");
+					}
+					gameWords.add(temp);
+				}
+			} else {
+				if (table.containsKey(i)) {
+					ArrayList<String> seed = seedWord.getFirst();
+					boolean wordRelated = false;
+					for(ArrayList<String> word : table.get(i)){
+						wordRelated = wordIsRelated(seed,word);
+						if(wordRelated){
+							gameWords.add(word);
+							seedWord.removeFirst();
+							seedWord.add(word);
+							break;
+						}
+					}
+					if(!wordRelated){
+						ArrayList<String> temp = new ArrayList<String>();
+						for (int z = 0; z < i; z++) {
+							temp.add(" ");
+						}
+						gameWords.add(temp);
+					}
+				
+
+				} else {
+					ArrayList<String> temp = new ArrayList<String>();
+					for (int z = 0; z < i; z++) {
+						temp.add(" ");
+					}
+					gameWords.add(temp);
+				}
+			}
+		}
+		return gameWords;
+	}
+	private boolean wordIsRelated(ArrayList<String> seed, ArrayList<String> word){
+		
+		for(int i = 0; i < seed.size();i++){
+			boolean allowContinue = false;
+			for(int z = 0; z <word.size();z++){
+				//check if the letter exists in the next string
+				//if so allow continue
+				if(seed.get(i).equals(word.get(z))){
+					allowContinue = true;
+					break;
+				}
+			}
+			//if letter was not present in the next word, no point to continue
+			if(!allowContinue)
+				return false;
+		}
+		return true;
+	}
 	public void generateWords(boolean unrelated, String topic, int userMin,
-			int userMax, boolean english) {
+			int userMax, boolean english,boolean scramble) {
 		Hashtable<Integer, ArrayList<ArrayList<String>>> topicList = sortTopicList(
 				Config.entireCollection.getBigWordCollectionByTopic(topic),
 				english);
@@ -93,7 +181,12 @@ public class GUIFacade {
 		if (unrelated) {
 			gameWords = unrelatedGameWords(topicList, userMin, userMax);
 		} else {
-			//need to build related game words method
+			gameWords = relatedGameWords(topicList,userMin, userMax);
+		}
+		if(scramble){
+			for(int i = 0; i < gameWords.size();i++){
+				Collections.shuffle(gameWords.get(i));
+			}
 		}
 	}
 
@@ -114,8 +207,6 @@ public class GUIFacade {
 		} else {
 			process = new WordProcessor(word.getTelugu());
 		}
-		// store this arraylist based on sized in topicWord
-		// ArrayList<ArrayList<String>>, will need to be created***
 		return Parser.stripSpaces(process.getLogicalChars());
 	}
 }

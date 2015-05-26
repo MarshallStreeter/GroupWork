@@ -94,7 +94,7 @@ public class mytest {
 
 		Vector int_items = new Vector();
 		int x;
-		for (x = 1; x <= 10; x++)
+		for (x = 1; x <= 18; x++)
 			int_items.add(x);
 
 		final DefaultComboBoxModel model1 = new DefaultComboBoxModel(int_items);

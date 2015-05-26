@@ -13,7 +13,7 @@ public class HtmlBodyCreator {
 	public static String createBody(ArrayList<ArrayList<String>> list) {
 		String body = "<html><head><meta charset=utf-8><title>Word Pyramid</title>"
 				+ "</head><body>\n"
-				+ "<div style='width:600px; margin: 0 auto; text-align: center;'>";
+				+ "<div style='width:1200px; margin: 0 auto; text-align: center;'>";
 		for (int i = 0; i < list.size(); i++) {
 			// start new row
 			body += "\n<div>\n";

@@ -126,7 +126,8 @@ public class GUIFacade {
 					ArrayList<String> seed = seedWord.getFirst();
 					boolean wordRelated = false;
 					for(ArrayList<String> word : table.get(i)){
-						wordRelated = wordIsRelated(seed,word);
+						WordProcessor nextWord = new WordProcessor(word);
+						wordRelated = nextWord.containsAllLogicalChars(seed);
 						if(wordRelated){
 							gameWords.add(word);
 							seedWord.removeFirst();

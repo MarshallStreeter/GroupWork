@@ -1,30 +1,10 @@
 package pyramids;
 
 
-import java.awt.Component;
-import java.awt.Desktop;
-import java.awt.EventQueue;
-import java.awt.Font;
-
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-
-import java.awt.BorderLayout;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.Hashtable;
-
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.util.*;
-
 import java.util.Map.Entry;
 
 import javax.swing.*;
@@ -99,7 +79,7 @@ public class mytest {
 
 		final DefaultComboBoxModel model1 = new DefaultComboBoxModel(int_items);
 		JComboBox cboMin = new JComboBox(model1);
-		cboMin.setBounds(118, 52, 147, 20);
+		cboMin.setBounds(83, 52, 80, 24);
 		frame.getContentPane().add(cboMin);
 		cboMin.addActionListener(new ActionListener() {
 			@Override
@@ -110,7 +90,7 @@ public class mytest {
 
 		final DefaultComboBoxModel model2 = new DefaultComboBoxModel(int_items);
 		JComboBox cboMax = new JComboBox(model2);
-		cboMax.setBounds(336, 52, 147, 20);
+		cboMax.setBounds(244, 52, 80, 24);
 		cboMax.setSelectedIndex(5);
 		frame.getContentPane().add(cboMax);
 		cboMax.addActionListener(new ActionListener() {
@@ -121,25 +101,25 @@ public class mytest {
 		});
 
 		JLabel lblMin = new JLabel("Min");
-		lblMin.setBounds(69, 55, 46, 14);
+		lblMin.setBounds(45, 56, 35, 14);
 		frame.getContentPane().add(lblMin);
 
 		JLabel lblMax = new JLabel("Max");
-		lblMax.setBounds(285, 55, 46, 14);
+		lblMax.setBounds(204, 56, 35, 14);
 		frame.getContentPane().add(lblMax);
 
 		cboTopic = new JComboBox(populateTopicBox());
 
-		cboTopic.setBounds(546, 52, 147, 20);
+		cboTopic.setBounds(639, 52, 160, 24);
 		frame.getContentPane().add(cboTopic);
 		cboTopic.setSelectedIndex(0);
 		JLabel lblTopic = new JLabel("Topic");
-		lblTopic.setBounds(500, 55, 46, 14);
+		lblTopic.setBounds(590, 56, 46, 14);
 		frame.getContentPane().add(lblTopic);
 
 		scrambleChkBox = new JCheckBox("Scramble");
 		scrambleChkBox.setBackground(new Color(70, 130, 180));
-		scrambleChkBox.setBounds(746, 159, 97, 23);
+		scrambleChkBox.setBounds(825, 172, 200, 50);
 		frame.getContentPane().add(scrambleChkBox);
 
 		JButton btnPlay = new JButton("Play Game");
@@ -156,24 +136,24 @@ public class mytest {
 
 			}
 		});
-		btnPlay.setBounds(746, 37, 200, 50);
+		btnPlay.setBounds(825, 52, 200, 50);
 		frame.getContentPane().add(btnPlay);
 
 		generateHtmlBtn = new JButton("Generate HTML");
 		generateHtmlBtn.addActionListener(new GenerateHTMLButtonHandler());
-		generateHtmlBtn.setBounds(746, 100, 200, 50);
+		generateHtmlBtn.setBounds(825, 115, 200, 50);
 		frame.getContentPane().add(generateHtmlBtn);
 		String[] languages = { "English", "Telugu" };
 		language = new JComboBox(languages);
-		language.setBounds(118, 100, 147, 22);
+		language.setBounds(447, 52, 105, 24);
 		frame.getContentPane().add(language);
 
 		JLabel lblLanguage = new JLabel("Language");
-		lblLanguage.setBounds(59, 103, 56, 16);
+		lblLanguage.setBounds(374, 56, 70, 16);
 		frame.getContentPane().add(lblLanguage);
-		
+
 		relatedCheckBox = new JCheckBox("Use Related Words");
-		relatedCheckBox.setBounds(746, 199, 200, 50);
+		relatedCheckBox.setBounds(825, 225, 200, 50);
 		relatedCheckBox.setBackground(new Color(70, 130, 180));
 		frame.getContentPane().add(relatedCheckBox);
 
@@ -199,18 +179,20 @@ public class mytest {
 
 	/**
 	 * Populates the topic list
-	 * 
+	 *
 	 * @return
 	 */
 	private Object[] populateTopicBox() {
 		ArrayList<String> topicStrings = new ArrayList<String>();
-		topicStrings.add("Any");
+
 		Hashtable<String, ArrayList<BigWord>> selects = Config.entireCollection
 				.getBigWordsTopicsTable();
 		for (Entry<String, ArrayList<BigWord>> entry : selects.entrySet()) {
 			String key = entry.getKey();
 			topicStrings.add(key);
 		}
+		Collections.sort(topicStrings);
+		topicStrings.add(0, "Any");
 		return topicStrings.toArray();
 	}
 
@@ -220,7 +202,8 @@ public class mytest {
 		int length = 60;
 		int height = 60;
 		x = formWidth / 2 - ((userMax / 2) * length);
-		y = 580;
+		//y = 580;
+		y = height + (height * userMax);
 
 		int level = 30;
 

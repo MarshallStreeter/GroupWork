@@ -53,17 +53,11 @@ public class mytest {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		// Creates the entire Collection
+
+		// Creates the entire BigWord Collection
 		Config.entireCollection = new BigWordCollection();
 		Config.gameCollection = Config.entireCollection;
-		// The following is an example of how to reduce collection using Siva's
-		// Methods (sort by difficulty level)
-		// Config.gameCollection =
-		// Config.entireCollection.getBigWordCollectionByLevel(1);
 		Config.gameCollection.removeDuplicates();
-		// I created printCollection() for testing purposes, feel free to edit
-		// it as necessary
-		//Config.gameCollection.printCollection();
 
 		frame = new JFrame();
 		frame.getContentPane().setBackground(new Color(70, 130, 180));
@@ -74,7 +68,7 @@ public class mytest {
 
 		Vector int_items = new Vector();
 		int x;
-		for (x = 1; x <= 18; x++)
+		for (x = 1; x <= Config.MAX_WORD_LENGTH; x++)
 			int_items.add(x);
 
 		final DefaultComboBoxModel model1 = new DefaultComboBoxModel(int_items);
@@ -159,6 +153,9 @@ public class mytest {
 
 	}
 
+	/**
+     * Destroy the dynamically generated pyramid buttons.
+     */
 	private void clean_board() {
 
 		Component[] controls = frame.getContentPane().getComponents();
@@ -196,23 +193,24 @@ public class mytest {
 		return topicStrings.toArray();
 	}
 
+	/**
+     * Generate the word pyramid.
+     */
 	private void play_game(int userMin, int userMax) {
 
 		int x, y;
-		int length = 60;
-		int height = 60;
+		int length = Config.PYRAMID_CELL_LENGTH;
+		int height = Config.PYRAMID_CELL_HEIGHT;
 		x = formWidth / 2 - ((userMax / 2) * length);
-		//y = 580;
 		y = height + (height * userMax);
 
 		int level = 30;
-
-
 
 		boolean english = ((language.getSelectedItem().toString().toLowerCase()
 				.equals("english")) ? true : false);
 		boolean unrelated = !relatedCheckBox.isSelected();
 		boolean scramble = scrambleChkBox.isSelected();
+
 		//separates logic and storage from the GUI class that isn't related to drawing board
 		GUIFacade.instance().generateWords(unrelated,
 				cboTopic.getSelectedItem().toString(), userMin, userMax,
@@ -256,12 +254,11 @@ public class mytest {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			// TODO Auto-generated method stub
 
 			saveNewFile(HtmlBodyCreator.createBody(GUIFacade.instance()
 					.getGameWords()));
-			String htmlFilePath = "Pyramid.html"; // path to your new file
-			File htmlFile = new File(htmlFilePath);
+
+			File htmlFile = new File( Config.PYRAMID_HTMLFILE_PATH );
 
 			// open the default web browser for the HTML page
 			try {
@@ -273,7 +270,7 @@ public class mytest {
 		}
 
 		private boolean saveNewFile(String contents) {
-			File file = new File("Pyramid.html");
+			File file = new File( Config.PYRAMID_HTMLFILE_PATH );
 			try {
 				FileOutputStream output = new FileOutputStream(file);
 				output.write(contents.getBytes());

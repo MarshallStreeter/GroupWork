@@ -1,4 +1,5 @@
 package pyramids;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 public class HtmlBodyCreator {
@@ -10,16 +11,25 @@ public class HtmlBodyCreator {
 	 * @param list
 	 * @return
 	 */
-	public static String createBody(ArrayList<ArrayList<String>> list) {
+	public static String createBody() {
 		String body = "<html><head><meta charset=utf-8><title>Word Pyramid</title>"
 				+ "</head><body>\n"
 				+ "<div style='width:1200px; margin: 0 auto; text-align: center;'>";
-		for (int i = 0; i < list.size(); i++) {
+		for (int i = 0; i < GUIFacade.instance().getGameWords().size(); i++) {
 			// start new row
 			body += "\n<div>\n";
 			// input the individual letters(logical string according to siva)
-			for (int z = 0; z < list.get(i).size(); z++) {
-				body += letterBlock(list.get(i).get(z));
+			for (int z = 0; z < GUIFacade.instance().getGameWords().get(i).size(); z++) {
+				byte[] b;
+				try {
+					b = GUIFacade.instance().getGameWords().get(i).get(z).getBytes("UTF-8");
+					String test = new String(b,"UTF-8");
+					body += letterBlock(test);
+				} catch (UnsupportedEncodingException e) {
+				
+					e.printStackTrace();
+				}
+			
 			}
 			// end this row
 			body += "\n</div>\n";

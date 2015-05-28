@@ -2,7 +2,9 @@ package pyramids;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -47,6 +49,7 @@ public class BigWordCollection
 		// Create the bigWordsList first
 		try 
 		{	
+			
 			processBigWordsInputFile(a_file_name);
 		} 
 		catch (IOException e) 
@@ -97,9 +100,10 @@ public class BigWordCollection
 	private void processBigWordsInputFile(String filename) throws IOException 
 	{
 		String line_read = "";
-		BufferedReader reader = new BufferedReader(
-				new InputStreamReader(
-						new FileInputStream(filename), "UTF-8"));
+		
+		InputStream is = BigWordCollection.class.getResourceAsStream(filename);
+		  InputStreamReader isr = new InputStreamReader(is,"UTF-8");
+		  BufferedReader reader = new BufferedReader(isr);
 
 		// igore the first line. we don't need the header line
 		line_read = reader.readLine(); 

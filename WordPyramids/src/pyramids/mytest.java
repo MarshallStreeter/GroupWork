@@ -255,8 +255,7 @@ public class mytest {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 
-			saveNewFile(HtmlBodyCreator.createBody(GUIFacade.instance()
-					.getGameWords()));
+			saveNewFile(HtmlBodyCreator.createBody());
 
 			File htmlFile = new File( Config.PYRAMID_HTMLFILE_PATH );
 
@@ -270,14 +269,16 @@ public class mytest {
 		}
 
 		private boolean saveNewFile(String contents) {
-			File file = new File( Config.PYRAMID_HTMLFILE_PATH );
+			
 			try {
-				FileOutputStream output = new FileOutputStream(file);
-				output.write(contents.getBytes());
-				output.close();
-				System.out.println("File Saved Successfully");
-				System.out
-						.println("File Saved Here: " + file.getAbsolutePath());
+				Writer out = new BufferedWriter(new OutputStreamWriter(
+					    new FileOutputStream(Config.PYRAMID_HTMLFILE_PATH), "UTF-8"));
+					try {
+					    out.write(contents);
+					} finally {
+					    out.close();
+					}
+			
 				return true;
 			} catch (IOException e) {
 				System.out.println("Error saving file");
